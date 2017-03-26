@@ -54,6 +54,7 @@ values."
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
+     semantic
      (c-c++ :variables
             c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode
