@@ -63,12 +63,17 @@ values."
             c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode
             )
+     (chinese :variables
+              chinese-enable-youdao-dict t
+              chinese-enable-fcitx t)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      chinese-pyim-greatdict
+                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -141,7 +146,12 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+                         monokai
+                         spacemacs-light
+                         solarized-light
+                         solarized-dark
+                         leuven
+                         zenburn)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -349,6 +359,13 @@ you should place your code here."
     (setq c-basic-offset 8)
     )
   (add-hook 'c-mode-hook 'my-c-mode-hook)
+
+   (evil-leader/set-key
+      "oy" 'youdao-dictionary-search-at-point+
+      "oa" 'org-agenda)
+
+    (chinese-pyim-greatdict-enable)
+
 
   )
 
