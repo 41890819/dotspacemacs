@@ -304,9 +304,6 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  (setq ycmd-server-command '("python" "/home/jerry/bin/ycmd/ycmd"))
-  (setq ycmd-force-semantic-completion t)
-  (setq ycmd-extra-conf-whitelist '("~/work/*"))
   )
 
 (defun dotspacemacs/user-config ()
@@ -318,12 +315,40 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   ;; ---------------------------------from here-------------------------;;
+  ;; (defun eshell/cls ()
+  ;;   "Clears the shell buffer ala Unix's clear or DOS' cls"
+  ;;   (interactive)
+  ;;   ;; the shell prompts are read-only, so clear that for the duration
+  ;;   (let ((inhibit-read-only t))
+  ;;     ;; simply delete the region
+  ;;     (delete-region (point-min) (point-max))))
+
+  ;;初始化shell
+  ;; (eshell)
+  ;; (rename-buffer "log")
+  (shell)
+  (rename-buffer "sh")
+  (switch-to-buffer "*spacemacs*")
+
   ;; Bind clang-format-region to C-M-tab in all modes:
   (global-set-key [C-M-tab] 'clang-format-region)
   ;; Bind clang-format-buffer to tab on the c++-mode only:
   (add-hook 'c++-mode-hook 'clang-format-bindings)
   (defun clang-format-bindings ()
     (define-key c++-mode-map [tab] 'clang-format-buffer))
+
+  (setq ycmd-server-command '("python" "/home/jerry/bin/ycmd/ycmd"))
+  (setq ycmd-force-semantic-completion t)
+  (setq ycmd-extra-conf-whitelist '("~/work/*"))
+
+  (defun my-c-mode-hook()
+    (c-set-style "linux")
+    (setq tab-width 8)
+    (setq default-tab-width 8)
+    (setq indent-tabs-mode t)
+    (setq c-basic-offset 8)
+    )
+  (add-hook 'c-mode-hook 'my-c-mode-hook)
 
   )
 
