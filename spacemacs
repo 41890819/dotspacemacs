@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ;; python
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -55,6 +56,7 @@ values."
      ;; syntax-checking
      ;; version-control
      semantic
+     ycmd
      (c-c++ :variables
             c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode
@@ -300,6 +302,9 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (setq ycmd-server-command '("python" "/home/jerry/bin/ycmd/ycmd"))
+  (setq ycmd-force-semantic-completion t)
+  (setq ycmd-extra-conf-whitelist '("~/work/*"))
   )
 
 (defun dotspacemacs/user-config ()
@@ -309,7 +314,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  
+
   ;; ---------------------------------from here-------------------------;;
   ;; Bind clang-format-region to C-M-tab in all modes:
   (global-set-key [C-M-tab] 'clang-format-region)
