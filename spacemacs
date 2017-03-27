@@ -46,7 +46,7 @@ values."
                       auto-completion-private-snippets-directory nil)
      ;; better-defaults
      emacs-lisp
-     ;; git
+     git
      ;; markdown
      ;; org
      (shell :variables
@@ -57,6 +57,8 @@ values."
      ;; version-control
      semantic
      ycmd
+     (gtags :variables
+            gtags-enable-by-default t)
      (c-c++ :variables
             c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode
