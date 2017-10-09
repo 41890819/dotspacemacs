@@ -31,19 +31,14 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ;; python
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     (auto-completion :variables
-                      auto-completion-return-key-behavior 'complete
-                      auto-completion-tab-key-behavior 'cycle
-                      auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-private-snippets-directory nil)
+     ;; (auto-completion :variables
+     ;;                  auto-completion-enable-sort-by-usage t)
      ;; better-defaults
      emacs-lisp
      git
@@ -55,29 +50,30 @@ values."
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
+     ;; ycmd
      semantic
-     ycmd
-     (gtags :variables
-            gtags-enable-by-default t)
+     cscope
      (c-c++ :variables
             c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode
             )
      (chinese :variables
+              chinese-enable-fcitx t
               chinese-enable-youdao-dict t
-              chinese-enable-fcitx t)
+              )
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(
-                                      chinese-pyim-greatdict
+   dotspacemacs-additional-packages '(ycmd
+                                      flycheck-ycmd
+                                      company-ycmd
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(chinese-pyim)
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -145,13 +141,15 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(
+                         spacemacs-dark
+                         zenburn
+                         solarized-light
                          monokai
                          spacemacs-light
-                         solarized-light
                          solarized-dark
                          leuven
-                         zenburn)
+                         )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -270,8 +268,18 @@ values."
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling t
-   ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
-   ;; derivatives. If set to `relative', also turns on relative line numbers.
+   ;; Control line numbers activation.
+   ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
+   ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+   ;; This variable can also be set to a property list for finer control:
+   ;; '(:relative nil
+   ;;   :disabled-for-modes dired-mode
+   ;;                       doc-view-mode
+   ;;                       markdown-mode
+   ;;                       org-mode
+   ;;                       pdf-view-mode
+   ;;                       text-mode
+   ;;   :size-limit-kb 1000)
    ;; (default nil)
    dotspacemacs-line-numbers t
    ;; Code folding method. Possible values are `evil' and `origami'.
@@ -324,49 +332,20 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; ---------------------------------from here-------------------------;;
-  ;; (defun eshell/cls ()
-  ;;   "Clears the shell buffer ala Unix's clear or DOS' cls"
-  ;;   (interactive)
-  ;;   ;; the shell prompts are read-only, so clear that for the duration
-  ;;   (let ((inhibit-read-only t))
-  ;;     ;; simply delete the region
-  ;;     (delete-region (point-min) (point-max))))
+  (evil-leader/set-key
+    "oy" 'youdao-dictionary-search-at-point+
+    "oa" 'org-agenda)
 
-  ;;初始化shell
-  ;; (eshell)
-  ;; (rename-buffer "log")
-  (shell)
-  (rename-buffer "sh")
-  (switch-to-buffer "*spacemacs*")
+  (set-variable 'ycmd-server-command '("/usr/bin/python" "/home/jerry/bin/ycmd/ycmd/"))
+  (set-variable 'ycmd-global-config "/home/jerry/bin/ycmd/examples/.ycm_extra_conf.py")
+  (global-ycmd-mode)
+  (global-flycheck-mode)
+  (global-company-mode)
 
-  ;; Bind clang-format-region to C-M-tab in all modes:
-  (global-set-key [C-M-tab] 'clang-format-region)
-  ;; Bind clang-format-buffer to tab on the c++-mode only:
-  (add-hook 'c++-mode-hook 'clang-format-bindings)
-  (defun clang-format-bindings ()
-    (define-key c++-mode-map [tab] 'clang-format-buffer))
+  (company-ycmd-setup)
+  (flycheck-ycmd-setup)
 
-  (setq ycmd-server-command '("python" "/home/jerry/bin/ycmd/ycmd"))
-  (setq ycmd-force-semantic-completion t)
-  (setq ycmd-extra-conf-whitelist '("~/work/*"))
-
-  (defun my-c-mode-hook()
-    (c-set-style "linux")
-    (setq tab-width 8)
-    (setq default-tab-width 8)
-    (setq indent-tabs-mode t)
-    (setq c-basic-offset 8)
-    )
-  (add-hook 'c-mode-hook 'my-c-mode-hook)
-
-   (evil-leader/set-key
-      "oy" 'youdao-dictionary-search-at-point+
-      "oa" 'org-agenda)
-
-    (chinese-pyim-greatdict-enable)
-
-
+  (ycmd-toggle-force-semantic-completion)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
