@@ -31,32 +31,37 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     python
+     java
+     c-c++
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     ;; (auto-completion :variables
-     ;;                  auto-completion-enable-sort-by-usage t)
-     ;; better-defaults
+     (auto-completion :variables
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-private-snippets-directory nil
+                      auto-completion-enable-sort-by-usage t)
+
+     better-defaults
      emacs-lisp
      git
      ;; markdown
-     ;; org
+     org
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
+     syntax-checking
      ;; version-control
-     ;; ycmd
+     ycmd
      semantic
      cscope
-     (c-c++ :variables
-            c-c++-enable-clang-support t
-            c-c++-default-mode-for-headers 'c++-mode
-            )
      (chinese :variables
               chinese-enable-fcitx t
               chinese-enable-youdao-dict t
@@ -66,9 +71,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(ycmd
-                                      flycheck-ycmd
-                                      company-ycmd
+   dotspacemacs-additional-packages '(
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
