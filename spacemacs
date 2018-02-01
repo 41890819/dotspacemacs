@@ -34,6 +34,8 @@ values."
      python
      java
      c-c++
+     (markdown :variables
+               markdown-live-preview-engine 'vmd)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -51,7 +53,6 @@ values."
      better-defaults
      emacs-lisp
      git
-     ;; markdown
      org
      (shell :variables
             shell-default-height 30
@@ -335,20 +336,37 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (multi-term)
+  (rename-buffer ",")
+  (multi-term)
+  (rename-buffer ".")
+  (switch-to-buffer "*spacemacs*")
+
   (evil-leader/set-key
     "oy" 'youdao-dictionary-search-at-point+
-    "oa" 'org-agenda)
+    "oa" 'org-agenda
+    "gd" 'magit-diff)
 
   (set-variable 'ycmd-server-command '("/usr/bin/python" "/home/jerry/bin/ycmd/ycmd/"))
-  (set-variable 'ycmd-global-config "/home/jerry/bin/ycmd/examples/.ycm_extra_conf.py")
+  ;; (set-variable 'ycmd-global-config "/home/jerry/bin/ycmd/examples/.ycm_extra_conf.py")
   (global-ycmd-mode)
-  (global-flycheck-mode)
+  ;; (global-flycheck-mode)
   (global-company-mode)
 
   (company-ycmd-setup)
-  (flycheck-ycmd-setup)
+  ;; (flycheck-ycmd-setup)
 
   (ycmd-toggle-force-semantic-completion)
+
+  (defun spacemacs/setup-helm-cscope-pop-key ()
+    (dolist (mode '(c-mode c++-mode))
+      (spacemacs/set-leader-keys-for-major-mode mode
+        "gp" 'helm-cscope-pop-mark
+        )))
+  (spacemacs/setup-helm-cscope-pop-key)
+
+  ;; (setq eclim-eclipse-dirs '("/opt/eclipse")
+        ;; eclim-executable "/home/jerry/.eclipse/org.eclipse.platform_4.7.1_1473617060_linux_gtk_x86_64/eclimd")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
